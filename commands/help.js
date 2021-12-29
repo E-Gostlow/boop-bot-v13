@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { botName, version, author } = require('../config.json');
+const { botName, version, author, supportURL } = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,12 +13,12 @@ module.exports = {
 		const cmd = interaction.options.getString('command');
 		const { commands } = interaction.client;
 
-		const row = new MessageActionRow()
+		const supportButton = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
 					.setLabel('Join our support server!')
 					.setStyle('LINK')
-					.setURL('https://discord.gg/qgPDUyrun8'),
+					.setURL(supportURL),
 			);
 
 		const generalHelpEmbed = new MessageEmbed()
@@ -28,18 +28,18 @@ module.exports = {
 			.setColor(colour)
 			.setFooter(`${botName} | Version ${version} | Developed by ${author}`);
 
-		if (!cmd) return interaction.reply({ embeds: [generalHelpEmbed], ephemeral: true, components: [row] }); //Sends general help message if no command is selected.
+		if (!cmd) return interaction.reply({ embeds: [generalHelpEmbed], ephemeral: true, components: [supportButton] }); //Sends general help message if no command is selected.
 
 		const name = cmd.toLowerCase();
 		const command = commands.get(name);
 
-		if (!command) return interaction.reply({ content: 'Couldn\'t find that command!', embeds: [generalHelpEmbed], ephemeral: true, components: [row] }); //Sends general help message if an invalid command is entered.
+		if (!command) return interaction.reply({ content: 'Couldn\'t find that command!', embeds: [generalHelpEmbed], ephemeral: true, components: [supportButton] }); //Sends general help message if an invalid command is entered.
 
 		const commandSpecificHelpEmbed = new MessageEmbed()
 			.setTitle(`Command: /${command.data.name}`)
 			.setDescription(`Description: ${command.data.description}`)
 			.setFooter(`${botName} | Version ${version} | Developed by ${author}`);
 
-		await interaction.reply({ embeds: [commandSpecificHelpEmbed], ephemeral: true, components: [row] }); //Sends command specific help message if valid command is entered.
+		await interaction.reply({ embeds: [commandSpecificHelpEmbed], ephemeral: true, components: [supportButton] }); //Sends command specific help message if valid command is entered.
 	},
 };
