@@ -1,34 +1,35 @@
 //const { TOKEN, CLIENT_ID, GUILD_ID } = require("./config.json");
-const { options } = require("./assets/colours.json");
-const { Client, Collection } = require("discord.js");
-const { Routes } = require("discord-api-types/v9");
-const { readdirSync, readdir } = require("fs");
-const { REST } = require("@discordjs/rest");
+const { options } = require('./assets/colours.json');
+const { Client, Collection } = require('discord.js');
+const { Routes } = require('discord-api-types/v9');
+const { readdirSync, readdir } = require('fs');
+const { REST } = require('@discordjs/rest');
+require('dotenv').config();
 
 const client = new Client({
 	intents: [
-		"GUILDS"
-	]
+		'GUILDS',
+	],
 });
 
 client.commands = new Collection();
 client.colours = options;
 client.token = process.env.TOKEN;
-let cmds = [];
+const cmds = [];
 
-const commandFiles = readdirSync("./commands/").filter(f => f.endsWith(".js"));
+const commandFiles = readdirSync('./commands/').filter(f => f.endsWith('.js'));
 
-for (const file of commandFiles){
+for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
 	client.commands.set(command.data.name, command);
 }
 
-const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
 (async () => {
-    try {
-        console.log("Setting slash commands..");
+	try {
+		console.log('Setting slash commands..');
 
 		for (let i = 0; i < client.commands.toJSON().length; i++) {
 			cmds.push(client.commands.toJSON()[i].data.toJSON());
@@ -37,26 +38,27 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 		await rest.put(
 			Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
 			{
-				body: cmds
-			}
+				body: cmds,
+			},
 		);
 
-		console.log("Success!");
-    } catch (err) {
+		console.log('Success!');
+	}
+	catch (err) {
 		console.error();
-    }
+	}
 })();
 
-readdir("./events/", (err, files) => {
+readdir('./events/', (err, files) => {
 	if (err) return console.error();
-	
+
 	files.forEach(file => {
-		if (!file.endsWith(".js")) return;
+		if (!file.endsWith('.js')) return;
 
 		const event = require(`./events/${file}`);
-		let eventName = file.split(".")[0];
+		const eventName = file.split('.')[0];
 
-		if (file.toLowerCase() == "ready.js"){
+		if (file.toLowerCase() == 'ready.js') {
 			client.once(eventName, event.bind(null, client));
 			return;
 		}
