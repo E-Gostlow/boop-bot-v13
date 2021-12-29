@@ -1,4 +1,4 @@
-const saveTimeout = require('../models/saveTimeout.js');
+const saveTimeout = require('../models/SaveTimeout.js');
 const { realiveCooldown, realiveRoleID } = require('../config.json');
 
 module.exports = async (client, message) => {
