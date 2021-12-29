@@ -45,7 +45,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 		console.log('Success!');
 	}
 	catch (err) {
-		console.error();
+		console.error(err);
 	}
 })();
 
