@@ -1,4 +1,3 @@
-//const { TOKEN, CLIENT_ID, GUILD_ID } = require("./config.json");
 const { options } = require('./assets/colours.json');
 const { Client, Collection } = require('discord.js');
 const { Routes } = require('discord-api-types/v9');

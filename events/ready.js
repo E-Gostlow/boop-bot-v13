@@ -8,7 +8,7 @@ module.exports = async (client) => {
 
 	client.user.setActivity(`${botName} v${version} - /help`);
 
-	let guild, role;
+	let guild, role, newDelay, timeoutEndTime;
 
 
 	//Fetch guild for realive cooldown
@@ -36,14 +36,20 @@ module.exports = async (client) => {
 		});
 
 		let endTime = await saveTimeout.findOne();
-		endTime = endTime.timeoutEnd;
-		const newDelay = endTime - Date.now();
+		try {
+			endTime = endTime.timeoutEnd;
+			newDelay = endTime - Date.now();
 
-		const date = Date.now();
-		const timeoutEndTime = date + newDelay;
+			const date = Date.now();
+			timeoutEndTime = date + newDelay;
+		}
+		catch {
+			console.log('No realive timeout found!');
+		}
 
 		if (newDelay <= 0) {
 			role.setMentionable(true, 'Realive cooldown ended');
+			await saveTimeout.deleteMany();
 		}
 
 		else {
@@ -57,8 +63,9 @@ module.exports = async (client) => {
 
 
 
-			setTimeout(function() {
+			setTimeout(async function() {
 				role.setMentionable(true, 'Realive cooldown ended');
+				await saveTimeout.deleteMany();
 			}, newDelay);
 		}
 	}

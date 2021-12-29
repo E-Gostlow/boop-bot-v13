@@ -1,17 +1,25 @@
-//const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-//const { botName, version, author, logsURL, internalLogChannel } = require('../config.json');
 const saveTimeout = require('../models/SaveTimeout.js');
-const delay = 3600000;
+const { realiveCooldown, realiveRoleID } = require('../config.json');
 
 module.exports = async (client, message) => {
 
 	//Realive mention check - If realive role is mentioned make role unmentionable.
 	if (message.mentions.roles.first() !== undefined) {
-		if (message.mentions.roles.first().id === '812195138699919373' && message.author.bot === false) {
-			message.mentions.roles.first().setMentionable(false, 'Realive cooldown');
+		if (message.mentions.roles.first().id === realiveRoleID && message.author.bot === false) {
+
+			let role;
+
+			try {
+				role = message.guild.roles.cache.find(roleID => roleID.id === realiveRoleID);
+			}
+			catch {
+				console.log('Unable to fetch role! Is the bot in the guild or has the role been deleted?');
+			}
+
+			role.setMentionable(false, 'Realive cooldown').catch(e => {console.log(`Could not edit role: ${e}`);});
 
 			const date = Date.now();
-			const timeoutEndTime = date + delay;
+			const timeoutEndTime = date + realiveCooldown;
 
 			await saveTimeout.deleteMany();
 
@@ -22,12 +30,9 @@ module.exports = async (client, message) => {
 			await newTimeout.save().catch(e => console.log(`Failed to save timeout: ${e}`));
 
 			setTimeout(function() {
-				message.mentions.roles.first().setMentionable(true, 'Realive cooldown ended');
-			}, delay);
+				role.setMentionable(true, 'Realive cooldown ended').catch(e => {console.log(`Could not edit role: ${e}`);});
+			}, realiveCooldown);
 		}
 	}
 	//End of realive mention check
-
-
-
-};//812195138699919373
+};
