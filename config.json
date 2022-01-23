@@ -1,0 +1,14 @@
+{
+	"debug": false,
+	"botName": "Boop Bot",
+	"version": "2.2.0",
+	"author": "RaulTechSupport#1148",
+	"authorID": "369055803677605889",
+	"supportURL": "https://discord.gg/qgPDUyrun8",
+	"logsURL": "https://dashboard.heroku.com/apps/rauls-boop-bot/logs",
+	"internalLogChannel": "903497554535260192",
+	"realiveCooldown": 3600000,
+	"realiveGuildID": "756355982245888021",
+	"realiveRoleID": "812195138699919373",
+	"inviteBotLink": "https://discord.com/api/oauth2/authorize?client_id=874066976597770310&permissions=8&scope=bot%20applications.commands"
+}
