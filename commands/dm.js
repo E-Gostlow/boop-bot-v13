@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { sentDmSave } = require('../assets/functions/sentDmSave');
 const { botName, version, author, supportURL, debug } = require('../config.json');
-const SentDmLog = require('../models/SentDmLog.js');
 
 
 module.exports = {
@@ -13,6 +13,8 @@ module.exports = {
 		.addStringOption(option => option.setName('message').setDescription('The message to the user!')
 			.setRequired(true)),
 	async execute(interaction) {
+
+		await interaction.deferReply({ ephemeral: true });
 
 		const permission = 'ADMINISTRATOR';
 
@@ -58,35 +60,22 @@ module.exports = {
 			.setDescription(`A DM has been sent to ${target}.`)
 			.setFooter({ text:`${botName} | Version ${version} | Developed by ${author}` });
 
-
-
 		try {
-			await target.send({ content: message, components: [sentFromButton, supportButton] });
+			await target.send({ content: message, components: [sentFromButton, supportButton] }).then(async (msg) => {
+				await sentDmSave(interaction, msg.id); //Log DM to database
+			});
 			if (debug) console.log(`[${botName}] Sent DM from ${interaction.guild.name} with message: ${message}`);
 
-			try {
-				const sentDm = new SentDmLog({
-					guildID: interaction.guildId,
-					guildName: interaction.guild.name,
-					targetID: target.id,
-					targetTag: target.tag,
-					senderID: interaction.user.id,
-					senderTag: interaction.user.tag,
-					dmMessage: message,
-				});
-
-				await sentDm.save();
-				console.log(`[${botName}] Saved DM message.`);
-			}
-			catch (e) {
-				console.error(`[${botName}] Failed to save message: ${e}`);
-			}
-
-			return await interaction.reply({ embeds: [dmSentEmbed], ephemeral: true });
+			return await interaction.editReply({ embeds: [dmSentEmbed], ephemeral: true });
 		}
 		catch (error) {
 			if (debug) console.error(`[${botName}] An error has occured while sending a DM from the DM command: ${error}`);
-			await interaction.reply({ embeds: [cannotDmEmbed], ephemeral: true });
+			try {
+				await interaction.editReply({ embeds: [cannotDmEmbed], ephemeral: true });
+			}
+			catch (e) {
+				console.error(e);
+			}
 		}
 
 	},

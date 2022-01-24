@@ -2,12 +2,9 @@ const mongoose = require('mongoose');
 
 const SentDmLogSchema = new mongoose.Schema({
 	guildID: { type: String },
-	guildName: { type: String },
-	targetID: { type: String },
-	targetTag: { type: String },
-	senderID: { type: String },
-	senderTag: { type: String },
-	dmMessage: { type: String },
+	userID: { type: String },
+	userTag: { type: String },
+	messages: { type: [Object] },
 });
 
 module.exports = mongoose.model('SentDmLog', SentDmLogSchema);

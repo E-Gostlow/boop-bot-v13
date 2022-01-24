@@ -51,8 +51,13 @@ module.exports = async (client, interaction) => {
 		try {
 			await interaction.reply({ content: `There was an error whie executing this command: ${error}\nDo you need to generate a config via \`/generateconfig\` or the button below?`, ephemeral: true, components: [reportButton] });
 		}
-		catch {
-			await interaction.editReply({ content: `There was an error whie executing this command: ${error}\nDo you need to generate a config via \`/generateconfig\` or the button below?`, ephemeral: true, components: [reportButton] });
+		catch (err) {
+			try {
+				await interaction.editReply({ content: `There was an error whie executing this command: ${err}\nDo you need to generate a config via \`/generateconfig\` or the button below?`, ephemeral: true, components: [reportButton] });
+			}
+			catch (e) {
+				console.error(e);
+			}
 		}
 	}
 };
