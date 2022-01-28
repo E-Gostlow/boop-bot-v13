@@ -22,6 +22,24 @@ module.exports = {
 
 		try {
 			body = await superagent.get('https://api.thecatapi.com/v1/images/search');
+			if (body.breeds) {
+				console.log('s');
+			}
+
+			if (body.breeds) {
+				breed = body.breeds.name;
+				const embed = new MessageEmbed()
+					.setTitle('Random cat:')
+					.setFooter({ text: `Breed: ${breed}` })
+					.setImage(body.url);
+				await interaction.reply({ embeds: [embed] });
+			}
+			else {
+				const embed = new MessageEmbed()
+					.setTitle('Random cat:')
+					.setImage(body.url);
+				await interaction.reply({ embeds: [embed] });
+			}
 		}
 		catch (error) {
 			const errorEmbed = new MessageEmbed()
@@ -32,26 +50,6 @@ module.exports = {
 			console.error(`[${botName}] Failed to send log message: ${error}`);
 			return await interaction.reply({ embeds: [errorEmbed], components: [supportButton] });
 		}
-		console.log(body);
-		console.log(body.breeds);
 
-		if (body.breeds) {
-			console.log('s');
-		}
-
-		if (body.breeds) {
-			breed = body.breeds.name;
-			const embed = new MessageEmbed()
-				.setTitle('Random cat:')
-				.setFooter({ text: `Breed: ${breed}` })
-				.setImage(body.url);
-			await interaction.reply({ embeds: [embed] });
-		}
-		else {
-			const embed = new MessageEmbed()
-				.setTitle('Random cat:')
-				.setImage(body.url);
-			await interaction.reply({ embeds: [embed] });
-		}
 	},
 };
