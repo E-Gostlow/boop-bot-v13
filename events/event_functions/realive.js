@@ -1,13 +1,13 @@
 const saveTimeout = require('../../models/SaveTimeout.js');
-const { realiveCooldown, realiveRoleID, botName } = require('../../config.json');
+const { realiveCooldown, botName } = require('../../config.json');
 
 async function realive(message) {
-	if (!(message.mentions.roles.first().id === realiveRoleID && message.author.bot === false)) return;
+	if (!(message.mentions.roles.first().id === process.env.REALIVE_ROLE_ID && message.author.bot === false)) return;
 
 	let role;
 
 	try {
-		role = message.guild.roles.cache.find(roleID => roleID.id === realiveRoleID);
+		role = message.guild.roles.cache.find(roleID => roleID.id === process.env.REALIVE_ROLE_ID);
 	}
 	catch {
 		console.error(`[${botName}] Unable to fetch role! Is the bot in the guild or has the role been deleted?`);
