@@ -1,5 +1,5 @@
 const saveTimeout = require('../../models/SaveTimeout.js');
-const { botName, realiveGuildID, realiveRoleID } = require('../../config.json');
+const { botName } = require('../../config.json');
 
 async function realiveReady(client) {
 
@@ -7,7 +7,7 @@ async function realiveReady(client) {
 
 	//Fetch guild for realive cooldown
 	try {
-		guild = client.guilds.cache.find(guildID => guildID.id === realiveGuildID);
+		guild = client.guilds.cache.find(guildID => guildID.id === process.env.REALIVE_GUILD_ID);
 	}
 	catch {
 		console.error(`[${botName}] Unable to fetch guild! Is the bot in the guild?`);
@@ -15,7 +15,7 @@ async function realiveReady(client) {
 
 	//Fetch realive role
 	try {
-		role = guild.roles.cache.find(roleID => roleID.id === realiveRoleID);
+		role = guild.roles.cache.find(roleID => roleID.id === process.env.REALIVE_ROLE_ID);
 	}
 	catch {
 		console.error(`[${botName}] Unable to fetch role! Is the bot in the guild or has the role been deleted?`);
