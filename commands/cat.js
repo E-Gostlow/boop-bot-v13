@@ -9,6 +9,8 @@ module.exports = {
 		.setDescription('Get a random cat image!'),
 	async execute(interaction) {
 
+		return await interaction.reply({ content: 'This command is currently disabled!' });
+		
 		let breed = '', body;
 
 		//Support button
