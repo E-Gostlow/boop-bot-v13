@@ -23,9 +23,9 @@ async function realiveReady(client) {
 
 
 	if (guild && role) {
-
-		let endTime = await saveTimeout.findOne();
+		let endTime;
 		try {
+			endTime = await saveTimeout.findOne();
 			endTime = endTime.timeoutEnd;
 			newDelay = endTime - Date.now();
 
