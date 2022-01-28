@@ -1,7 +1,7 @@
 const guildSettings = require('../models/GuildSettings.js');
 const { botName, debug } = require('../config.json');
 
-module.exports = async (guild) => {
+async function (guild) {
 
 	const guildid = guild.id;
 
