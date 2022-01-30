@@ -1,7 +1,7 @@
 const guildSettings = require('../models/GuildSettings.js');
 const { botName, debug } = require('../config.json');
 
-async function generateConfig (guild) {
+async function generateConfig(guild) {
 
 	const guildid = guild.id;
 
@@ -41,4 +41,6 @@ async function generateConfig (guild) {
 			return 'An error occured while generating a config!';
 		}
 	}
-};
+}
+
+module.exports.generateConfig = generateConfig;
