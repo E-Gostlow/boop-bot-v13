@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { botName, version, author } = require('../config.json');
-const generateConfig = require('../assets/generateConfig.js');
+const { generateConfig } = require('../assets/generateConfig.js');
 
 module.exports = {
 	data: {

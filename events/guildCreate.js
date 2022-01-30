@@ -1,7 +1,7 @@
-const generateConfig = require('../assets/generateConfig.js');
+const { generateConfig } = require('../assets/generateConfig.js');
 
 
-module.exports = async (guild) => {
+module.exports = async (client, guild) => {
 
 	await generateConfig(guild);
 
