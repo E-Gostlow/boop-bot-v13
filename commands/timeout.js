@@ -70,9 +70,9 @@ module.exports = {
 
 
 		//Ensure interaction member has permission to execute the command.
-		if (!interaction.member.permissions.has(permission)) return await interaction.reply({ embeds: [insufficientPermsEmbed], ephemeral: true });
-
 		if (!interaction.inGuild) return await interaction.reply({ content: 'This command cannot be executed inside DM\'s!', components: [supportButton] });
+
+		if (!interaction.member.permissions.has(permission)) return await interaction.reply({ embeds: [insufficientPermsEmbed], ephemeral: true });
 
 		if (target.id === client.user.id) return await interaction.reply({ embeds: [targetedBotEmbed], ephemeral: true, components: [supportButton] }); //If bot is targeted
 
